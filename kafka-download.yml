@@ -1,0 +1,23 @@
+---
+- name: Download and unpacking Apache Kafka
+  hosts: my
+  become: yes
+
+  tasks:
+    - name: create directory
+      file:
+        path: "/netology/kafka"
+        state: directory
+        mode: '0754'
+
+    - name: download Kafka
+      get_url:
+        url: "https://dlcdn.apache.org/kafka/4.0.0/kafka-4.0.0-src.tgz"
+        dest: "/tmp/kafka.tgz"
+        timeout: 300
+
+    - name: unpacking arhive
+      unarchive:
+        src: "/tmp/kafka.tgz"
+        dest: "/netology/kafka"
+        remote_src: yes

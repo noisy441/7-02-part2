@@ -1,0 +1,18 @@
+---
+- name: Install package
+  hosts: my
+  become: yes
+  vars:
+    package_name: "tuned"
+  
+  tasks:
+    - name: Installing package
+      apt:
+        state: present
+        name: "{{ package_name }}"
+    
+    - name: Launch and add to startup
+      service:
+        name: "{{ package_name }}"
+        state: started
+        enabled: yes

@@ -1,0 +1,24 @@
+---
+- name: New MOTD using variable
+  hosts: all
+  become: yes
+  
+  #В качестве приветствия устанавливаем IP-адрес и hostname управляемого хоста, пожелание хорошего дня системному администратору. 
+
+  vars:
+    motd_message: |
+      Доброго дня системный администратор. Ваш IP: {{ ansible_default_ipv4.address }} hostname: {{ ansible_hostname }}
+      
+  tasks:
+    - name: Create a temporary file with a message
+      copy:
+        content: "{{ motd_message }}"
+        dest: /tmp/new_motd.txt
+        
+    - name: Installing a new MOTD
+      command: cp /tmp/new_motd.txt /etc/motd
+      
+    - name: Deleting a temporary file
+      file:
+        path: /tmp/new_motd.txt
+        state: absent
